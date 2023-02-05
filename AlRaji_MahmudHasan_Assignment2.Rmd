@@ -1,0 +1,162 @@
+---
+title: "Assignment-2_Data605"
+author: "Mahmud Hasan Al Raji"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Problem Set 1
+
+# (1) Show that $A^TA$ $\neq$ $AA^T$ in general. (Proof and demonstration)
+
+# Ans-1:
+
+Proof:
+
+Let, A is a matrix of order m x n (where m $\neq$ n), then its transpose matrix $A^T$ will be the order of n x m. So, the multiplication of the two matrices $A^T$ and $A$ i.e.the product matrix, $A^TA$ will be the order of n x n. Again, the multiplication of the matrices $A$ and $A^T$ i.e.the product matrix, $AA^T$  will be the order of m x m. It is known by definition that two matrices will be equal if their orders are equal and also if the elements of the first matrix are equal to the corresponding elements in the second matrix. 
+Here, as the order n x n is not equal to the order m x m, hence, $A^TA$ is not equal to $AA^T$. 
+Therefore,  $A^TA$ $\neq$ $AA^T$. 
+
+Demonstration:
+
+Let's consider a 2x3 matrix, A as below:
+
+```{r }
+A<-matrix(c(2,3,4,5,6,7),nrow=2)
+A
+```
+
+The transpose matrix of A, $A^T$ is below:
+
+```{r }
+TA<-t(A)
+TA
+```
+Now,the product matrix $A^TA$ can be found by matrix multiplication as below:
+
+```{r }
+TA%*%A
+```
+It is seen that the order of the matrix, $A^TA$ is 3 x 3
+
+Again, the product matrix $AA^T$ can be found by matrix multiplication:
+
+```{r }
+A%*%TA
+```
+Now, the order of the matrix,$AA^T$ is 2 x 2. 
+
+As the order and the corresponding elements of the two matrices above are not equal. 
+Therefore, $A^TA$ $\neq$ $AA^T$. 
+
+
+# (2) For a special type of square matrix A, we get $A^TA$ = $AA^T$ Under what conditions could this be true? (Hint: The Identity matrix I is an example of such a matrix).
+
+# Ans-2:
+
+The conditions for $A^TA$ is being equal to $AA^T$ are:
+
+(i) Matrix, A should be a square matrix
+(ii) All the elements of the main diagonal of the matrix, A should be equal in value and the rest of the elements of A should be equal too. That means, the transpose matrix of A should be equal to the matrix A.
+
+Let's verify the conditions above by considering the following square matrix, A of order 3 x 3:
+
+```{r }
+A<-matrix(c(2,5,5,5,2,5,5,5,2),nrow=3)
+A
+```
+Transpose of A, $A^T$:
+
+```{r }
+TA<-t(A)
+TA
+```
+Now, product matrix, $A^TA$:
+
+```{r }
+TA%*%A
+```
+and product matrix, $AA^T$:
+
+```{r }
+A%*%TA
+```
+
+As the order and the corresponding elements of the two product matrices above are equal. 
+Therefore, $A^TA$ = $AA^T$. 
+
+# Problem Set 2
+
+Matrix factorization is a very important problem. There are supercomputers built just
+to do matrix factorizations. Every second you are on an airplane, matrices are being
+factorized. Radars that track flights use a technique called Kalman filtering. At the heart
+of Kalman Filtering is a Matrix Factorization operation. Kalman Filters are solving linear
+systems of equations when they track your flight using radars.
+Write an R function to factorize a square matrix A into LU or LDU, whichever you
+prefer. You don’t have to worry about permuting rows of A and you can assume that A is less
+than 5x5, if you need to hard-code any variables in your code. 
+
+# Ans-2: Factorizing matrix A into L and U matrices such that A=LU
+
+```{r}
+
+# Consider the following square matrix A 
+
+A = matrix(c(1,3,6,9,12,9,6,3,1),nrow=3,ncol = 3)
+
+# Constructing LU factorization function
+
+LU_Factorization= function(A){
+  
+  # Assigning matrix A to the upper triangular  matrix U 
+  
+  U <- A        
+  
+  # Constructing a diagonal matrix of same dimension as matrix A and assigning it as lower triangular matrix L  
+  L <- diag(nrow(A)) 
+
+  # Finding the upper and the lower triangular matrices
+  
+  for (j in c(1:nrow(A))){
+    for(i in c(2:nrow(A))){
+      if(i > j){
+        row <- U[j,]; #print(row) #Extract all columns but only for the jth row
+        multiplier <- U[i, j] / row[j] #Calculate the multiplier
+        U[i,] <- U[i,] - (multiplier * row);#print(U) #Use the multiplier to swap out entries in U matrix
+        L[i,j] <- multiplier; #print(L[i,j]); #print(multiplier); print(L) #Use the multiplier calculated to swap entries in L matrix
+      }
+    }
+  }
+  
+  return(list(L=L, U=U))
+}
+
+R<-LU_Factorization(A)
+R
+```
+
+# Checking the result:
+
+```{r }
+R$L%*%R$U
+A
+R$L%*%R$U==A
+```
+It is seen above that the matrix, A is equal to LU. Therefore, the function written for determining the matrix factorization is correct.
+
+
+
+
+
+
+
+
+
+
+
+
+
